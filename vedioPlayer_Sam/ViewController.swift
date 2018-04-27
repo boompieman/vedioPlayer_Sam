@@ -116,14 +116,18 @@ class ViewController: UIViewController {
             }
         }
     }
-
     func rotateToLandscapeRight() {
 
         let height = UIScreen.main.bounds.height
         let width = UIScreen.main.bounds.width
 
+        print("sss",UIScreen.main.bounds)
+
         UIView.animate(withDuration: 0.4, animations: {
-            self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+
+
+
+            self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
             self.playerLayer.frame = self.avPlayerView.frame
         })
 
@@ -235,6 +239,11 @@ class ViewController: UIViewController {
     }
 
     func transferSecondsToMMSS(seconds: Float64) -> String {
+
+        guard !(seconds.isNaN || seconds.isInfinite) else {
+            return "00:00" // or do some error handling
+        }
+
         let min = Int(seconds / 60)
 
         let sec = Int(seconds.truncatingRemainder(dividingBy: 60))
@@ -297,22 +306,6 @@ class ViewController: UIViewController {
                 let value = UIInterfaceOrientation.portrait.rawValue
 
                 UIDevice.current.setValue(value, forKey: "orientation")
-//
-//                let height = self.view.bounds.width
-//                let width = self.view.bounds.height
-//
-//                UIView.animate(withDuration: 0.4, animations: {
-////                    self.view.transform = CGAffineTransform(rotationAngle: -1 * CGFloat.pi)
-//                    self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
-//                    self.playerLayer.frame = self.avPlayerView.bounds
-//                })
-//
-//                self.changeButtonColorToBlack()
-//                UIApplication.shared.isStatusBarHidden = false
-//                self.navigationController?.isNavigationBarHidden = false
-//                self.searchTextField.isHidden = false
-//                self.searchButton.isHidden = false
-
                 isRotated = false
             }
 
@@ -321,44 +314,27 @@ class ViewController: UIViewController {
                 let value = UIInterfaceOrientation.landscapeLeft.rawValue
 
                 UIDevice.current.setValue(value, forKey: "orientation")
-
-//                let height = self.view.bounds.width
-//                let width = self.view.bounds.height
-//
-//
-//                UIView.animate(withDuration: 0.4, animations: {
-//                    self.view.transform = CGAffineTransform(rotationAngle: (CGFloat)(M_PI_2))
-//                    self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-//                    self.playerLayer.frame = self.avPlayerView.bounds
-//                })
-//
-//                self.changeButtonColorToWhite()
-//
-//                //            print("player:", self.playerLayer.frame)
-//                //            print("view:", self.avPlayerView.bounds)
-//
-//                UIApplication.shared.isStatusBarHidden = true
-//                self.navigationController?.isNavigationBarHidden = true
-//                self.searchTextField.isHidden = true
-//                self.searchButton.isHidden = true
-
-
-
                 isRotated = true
             }
         }
     }
 
     @IBAction func searchButtonPressed(_ sender: Any) {
+
+        if player != nil {
+            self.player.pause()
+            self.player.removeTimeObserver(self)
+        }
+
         guard let urlString = self.searchTextField.text else {
             return
         }
 
-//        guard let videoURL = URL(string: urlString) else {
-//            return
-//        }
-        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
-        let playerItem = AVPlayerItem(url: videoURL!)
+        guard let videoURL = URL(string: urlString) else {
+            return
+        }
+//        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
+        let playerItem = AVPlayerItem(url: videoURL)
         player = AVPlayer(playerItem: playerItem)
         playerLayer = AVPlayerLayer(player: player)
 
