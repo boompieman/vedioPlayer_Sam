@@ -21,6 +21,9 @@ class ViewController: UIViewController {
     var isRotated: Bool = false
     @IBOutlet weak var fullScreenButton: UIButton!
 
+
+    var timeObserver: Any!
+
     @IBOutlet weak var fastFowardButton: UIButton!
     @IBOutlet weak var rewindButton: UIButton!
     @IBOutlet weak var avPlayerView: UIView!
@@ -252,7 +255,7 @@ class ViewController: UIViewController {
     }
 
     func addProgressObserver() {
-        self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(Int64(1.0), Int32(1.0)), queue: DispatchQueue.main, using: { (time) in
+        self.timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMake(Int64(1.0), Int32(1.0)), queue: DispatchQueue.main, using: { (time) in
             var current = CMTimeGetSeconds(time)
             let total = CMTimeGetSeconds((self.player.currentItem?.duration)!)
 
@@ -323,7 +326,7 @@ class ViewController: UIViewController {
 
         if player != nil {
             self.player.pause()
-            self.player.removeTimeObserver(self)
+            self.player.removeTimeObserver(self.timeObserver)
         }
 
         guard let urlString = self.searchTextField.text else {
