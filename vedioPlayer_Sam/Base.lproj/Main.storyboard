@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zUj-iI-5OW">
+                            <textField opaque="NO" alpha="0.25" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="請輸入欲播放影片網址" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zUj-iI-5OW">
                                 <rect key="frame" x="10" y="79" width="295" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -39,6 +39,9 @@
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="OoO-xB-3Uf">
                                 <rect key="frame" x="64" y="553" width="247" height="31"/>
+                                <connections>
+                                    <action selector="changeVideoTime:" destination="BYZ-38-t0r" eventType="valueChanged" id="wfU-7H-akf"/>
+                                </connections>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qNJ-ze-fau">
                                 <rect key="frame" x="175" y="613" width="24" height="24"/>
@@ -77,6 +80,9 @@
                                     <constraint firstAttribute="width" constant="24" id="2qJ-Fv-hQH"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="full_screen_button"/>
+                                <connections>
+                                    <action selector="fullScreenButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mSn-c0-RYC"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aHn-i6-ZJi">
                                 <rect key="frame" x="111" y="613" width="24" height="24"/>
@@ -146,8 +152,10 @@
                     <connections>
                         <outlet property="currentTimeLabel" destination="jwY-uh-qZQ" id="Z6f-4f-odV"/>
                         <outlet property="endTimeLabel" destination="fYp-34-XVA" id="wME-bm-NEL"/>
+                        <outlet property="fullScreenButton" destination="e2q-rK-eko" id="lhW-JF-3iR"/>
                         <outlet property="playButton" destination="qNJ-ze-fau" id="F6h-q3-mR5"/>
                         <outlet property="progressSlider" destination="OoO-xB-3Uf" id="zTT-se-uUb"/>
+                        <outlet property="searchButton" destination="xRs-AM-O2r" id="Gye-O4-we7"/>
                         <outlet property="searchTextField" destination="zUj-iI-5OW" id="PZz-9H-S51"/>
                         <outlet property="voiceButton" destination="4Wg-s9-xoo" id="5ex-7m-b9C"/>
                     </connections>

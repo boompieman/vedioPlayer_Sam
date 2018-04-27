@@ -14,24 +14,55 @@ import AVKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var searchTextField: UITextField!
-
+    @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var playButton: UIButton!
     var isPlaying: Bool = false
     var isVolumeOn: Bool = true
+    @IBOutlet weak var fullScreenButton: UIButton!
 
     @IBOutlet weak var voiceButton: UIButton!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var endTimeLabel: UILabel!
     var player: AVPlayer!
 
+    var playerLayer: AVPlayerLayer!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
+        print(self.view.bounds)
         view.backgroundColor = UIColor.white
         self.title = "Video Player"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+
+
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.screenDidRotate(note:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+
+    @objc fileprivate func screenDidRotate(note : Notification) {
+        let orientation = UIDevice.current.orientation
+        switch orientation {
+        case .portrait:
+            print("portrait")
+//            rotateToPortrait()
+            break
+        case .portraitUpsideDown:
+            break
+        case .landscapeLeft:
+            print("landscapeLeft")
+            rotateToLandscapeLeft()
+        case .landscapeRight:
+            print("landscapeRight")
+//            rotateToLandscapeRight()
+        default:
+            break
+        }
+    }
+
+    func rotateToLandscapeLeft() {
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,13 +74,13 @@ class ViewController: UIViewController {
 
         if (player != nil) {
             if (isPlaying) {
-                self.playButton.setImage(UIImage(named: "stop"), for: .normal)
+                self.playButton.setImage(UIImage(named: "play_button"), for: .normal)
                 isPlaying = false
                 print(isPlaying)
                 player.pause()
             }
             else {
-                self.playButton.setImage(UIImage(named: "play_button"), for: .normal)
+                self.playButton.setImage(UIImage(named: "stop"), for: .normal)
                 isPlaying = true
                 print(isPlaying)
                 player.play()
@@ -106,10 +137,6 @@ class ViewController: UIViewController {
             var current = CMTimeGetSeconds(time)
             let total = CMTimeGetSeconds((self.player.currentItem?.duration)!)
 
-            
-
-            print("已經播放\(current) seconds")
-
             self.currentTimeLabel.text = self.transferSecondsToMMSS(seconds: current)
             self.endTimeLabel.text = self.transferSecondsToMMSS(seconds: total)
 
@@ -119,8 +146,9 @@ class ViewController: UIViewController {
         })
     }
 
-    @IBAction func voiceButtonPressed(_ sender: Any) {
 
+
+    @IBAction func voiceButtonPressed(_ sender: Any) {
 
         if self.player != nil {
 
@@ -135,13 +163,47 @@ class ViewController: UIViewController {
             }
         }
     }
+    @IBAction func changeVideoTime(_ sender: Any) {
+
+        let totalTime = CMTimeGetSeconds((self.player.currentItem?.duration)!)
+
+        var newTime = totalTime * Float64(self.progressSlider.value)
+
+        let time2 = CMTimeMake(Int64(newTime * 1000 as Float64), 1000)
+
+        player.seek(to: time2, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+    }
+
+    @IBAction func fullScreenButtonPressed(_ sender: Any) {
+
+        UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
+        print(self.view.bounds)
+
+        // UIView动画进行旋转
+        UIView.animate(withDuration: 0.4, animations: {
+//            self.view.transform = CGAffineTransform(rotationAngle: self.degreeToRadian(90))
+            let affineTransform = CGAffineTransform(rotationAngle: self.degreeToRadian(90))
+            self.playerLayer.setAffineTransform(affineTransform)
+            self.playerLayer.frame = self.view.bounds
+            print(self.playerLayer.frame)
+        })
+        UIApplication.shared.isStatusBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
+        self.searchTextField.isHidden = true
+        self.searchButton.isHidden = true
+    }
+
+    func degreeToRadian(_ x: CGFloat) -> CGFloat {
+        return .pi * x / 180.0
+    }
+
 
     @IBAction func searchButtonPressed(_ sender: Any) {
 //        let videoURL = URL(string: self.searchTextField.text)
         let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
         let playerItem = AVPlayerItem(url: videoURL!)
         player = AVPlayer(playerItem: playerItem)
-        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer = AVPlayerLayer(player: player)
 
         let playerWidth = self.view.bounds.width
         let playerHeight = 9 * playerWidth / 16
@@ -150,7 +212,11 @@ class ViewController: UIViewController {
         self.view.layer.addSublayer(playerLayer)
 
         addProgressObserver()
+
+        //ready to play
         player.play()
+
+        self.playButton.setImage(UIImage(named: "stop"), for: .normal)
         self.isPlaying = true
 
 
