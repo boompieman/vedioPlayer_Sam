@@ -34,7 +34,7 @@ class ViewController: UIViewController {
 
 
 
-        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -109,7 +109,7 @@ class ViewController: UIViewController {
             var current = CMTimeGetSeconds(time)
             let total = CMTimeGetSeconds((self.player.currentItem?.duration)!)
 
-            
+
 
             print("已經播放\(current) seconds")
 
@@ -126,7 +126,7 @@ class ViewController: UIViewController {
     @IBAction func searchButtonPressed(_ sender: Any) {
 
 
-//        let videoURL = URL(string: self.searchTextField.text)
+        //        let videoURL = URL(string: self.searchTextField.text)
         let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
         let playerItem = AVPlayerItem(url: videoURL!)
         player = AVPlayer(playerItem: playerItem)
