@@ -90,20 +90,26 @@ class ViewController: UIViewController {
     @objc fileprivate func screenDidRotate(note : Notification) {
 
 
-        if player != nil {
+        if (player != nil) {
             let orientation = UIDevice.current.orientation
             switch orientation {
             case .portrait:
                 print("portrait")
+
+                let fullScreenImage = UIImage(named: "full_screen_button")?.withRenderingMode(.alwaysTemplate)
+                fullScreenButton.setImage(fullScreenImage, for: .normal)
                 rotateToPortrait()
                 break
             case .portraitUpsideDown:
                 break
             case .landscapeLeft:
-                print("landscapeLeft")
+                let fullScreenExitImage = UIImage(named: "full_screen_exit")?.withRenderingMode(.alwaysTemplate)
+                fullScreenButton.setImage(fullScreenExitImage, for: .normal)
                 rotateToLandscapeLeft()
             case .landscapeRight:
-                print("landscapeRight")
+
+                let fullScreenExitImage = UIImage(named: "full_screen_exit")?.withRenderingMode(.alwaysTemplate)
+                fullScreenButton.setImage(fullScreenExitImage, for: .normal)
                 rotateToLandscapeRight()
             default:
                 break
@@ -288,45 +294,55 @@ class ViewController: UIViewController {
         if self.player != nil {
 
             if (isRotated) {
+                let value = UIInterfaceOrientation.portrait.rawValue
 
-                let height = self.view.bounds.width
-                let width = self.view.bounds.height
-
-                UIView.animate(withDuration: 0.4, animations: {
-                    self.view.transform = CGAffineTransform(rotationAngle: -1 * CGFloat.pi)
-                    self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
-                    self.playerLayer.frame = self.avPlayerView.bounds
-                })
-
-                self.changeButtonColorToBlack()
-                UIApplication.shared.isStatusBarHidden = false
-                self.navigationController?.isNavigationBarHidden = false
-                self.searchTextField.isHidden = false
-                self.searchButton.isHidden = false
+                UIDevice.current.setValue(value, forKey: "orientation")
+//
+//                let height = self.view.bounds.width
+//                let width = self.view.bounds.height
+//
+//                UIView.animate(withDuration: 0.4, animations: {
+////                    self.view.transform = CGAffineTransform(rotationAngle: -1 * CGFloat.pi)
+//                    self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
+//                    self.playerLayer.frame = self.avPlayerView.bounds
+//                })
+//
+//                self.changeButtonColorToBlack()
+//                UIApplication.shared.isStatusBarHidden = false
+//                self.navigationController?.isNavigationBarHidden = false
+//                self.searchTextField.isHidden = false
+//                self.searchButton.isHidden = false
 
                 isRotated = false
             }
 
             else {
-                let height = self.view.bounds.width
-                let width = self.view.bounds.height
+
+                let value = UIInterfaceOrientation.landscapeLeft.rawValue
+
+                UIDevice.current.setValue(value, forKey: "orientation")
+
+//                let height = self.view.bounds.width
+//                let width = self.view.bounds.height
+//
+//
+//                UIView.animate(withDuration: 0.4, animations: {
+//                    self.view.transform = CGAffineTransform(rotationAngle: (CGFloat)(M_PI_2))
+//                    self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+//                    self.playerLayer.frame = self.avPlayerView.bounds
+//                })
+//
+//                self.changeButtonColorToWhite()
+//
+//                //            print("player:", self.playerLayer.frame)
+//                //            print("view:", self.avPlayerView.bounds)
+//
+//                UIApplication.shared.isStatusBarHidden = true
+//                self.navigationController?.isNavigationBarHidden = true
+//                self.searchTextField.isHidden = true
+//                self.searchButton.isHidden = true
 
 
-                UIView.animate(withDuration: 0.4, animations: {
-                    self.view.transform = CGAffineTransform(rotationAngle: (CGFloat)(M_PI_2))
-                    self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-                    self.playerLayer.frame = self.avPlayerView.bounds
-                })
-
-                self.changeButtonColorToWhite()
-
-                //            print("player:", self.playerLayer.frame)
-                //            print("view:", self.avPlayerView.bounds)
-
-                UIApplication.shared.isStatusBarHidden = true
-                self.navigationController?.isNavigationBarHidden = true
-                self.searchTextField.isHidden = true
-                self.searchButton.isHidden = true
 
                 isRotated = true
             }
@@ -334,16 +350,15 @@ class ViewController: UIViewController {
     }
 
     @IBAction func searchButtonPressed(_ sender: Any) {
-
         guard let urlString = self.searchTextField.text else {
             return
         }
 
-        guard let videoURL = URL(string: urlString) else {
-            return
-        }
-//        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
-        let playerItem = AVPlayerItem(url: videoURL)
+//        guard let videoURL = URL(string: urlString) else {
+//            return
+//        }
+        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
+        let playerItem = AVPlayerItem(url: videoURL!)
         player = AVPlayer(playerItem: playerItem)
         playerLayer = AVPlayerLayer(player: player)
 
@@ -360,7 +375,7 @@ class ViewController: UIViewController {
         //ready to play
         player.play()
 
-        let stopImage = UIImage(named:"play_button")?.withRenderingMode(.alwaysTemplate)
+        let stopImage = UIImage(named:"stop")?.withRenderingMode(.alwaysTemplate)
         self.playButton.setImage(stopImage, for: .normal)
         self.isPlaying = true
 
