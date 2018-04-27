@@ -91,7 +91,6 @@ class ViewController: UIViewController {
 
 
         if player != nil {
-
             let orientation = UIDevice.current.orientation
             switch orientation {
             case .portrait:
@@ -113,15 +112,13 @@ class ViewController: UIViewController {
     }
 
     func rotateToLandscapeRight() {
-        
+
         let height = UIScreen.main.bounds.height
         let width = UIScreen.main.bounds.width
-        //        print(self.view.bounds)
 
         UIView.animate(withDuration: 0.4, animations: {
             self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
             self.playerLayer.frame = self.avPlayerView.frame
-            print(self.playerLayer.frame)
         })
 
         self.changeButtonColorToWhite()
@@ -141,7 +138,6 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 0.4, animations: {
             self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
             self.playerLayer.frame = self.avPlayerView.bounds
-            print(self.playerLayer.frame)
         })
 
         self.changeButtonColorToBlack()
@@ -156,12 +152,10 @@ class ViewController: UIViewController {
 
         let height = UIScreen.main.bounds.height
         let width = UIScreen.main.bounds.width
-//        print(self.view.bounds)
 
             UIView.animate(withDuration: 0.4, animations: {
                 self.avPlayerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
                 self.playerLayer.frame = self.avPlayerView.frame
-                print(self.playerLayer.frame)
             })
 
         self.changeButtonColorToWhite()
@@ -287,13 +281,30 @@ class ViewController: UIViewController {
         player.seek(to: time2, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
     }
 
+
+
     @IBAction func fullScreenButtonPressed(_ sender: Any) {
 
         if self.player != nil {
 
             if (isRotated) {
-                self.view.transform = CGAffineTransform(rotationAngle: (CGFloat)(M_PI_2))
-                rotateToPortrait()
+
+                let height = self.view.bounds.width
+                let width = self.view.bounds.height
+
+                UIView.animate(withDuration: 0.4, animations: {
+                    self.view.transform = CGAffineTransform(rotationAngle: -1 * CGFloat.pi)
+                    self.avPlayerView.frame = CGRect(x: 0, y: (height - ((9 * width) / 16)) / 2, width: width, height: (9 * width) / 16)
+                    self.playerLayer.frame = self.avPlayerView.bounds
+                })
+
+                self.changeButtonColorToBlack()
+                UIApplication.shared.isStatusBarHidden = false
+                self.navigationController?.isNavigationBarHidden = false
+                self.searchTextField.isHidden = false
+                self.searchButton.isHidden = false
+
+                isRotated = false
             }
 
             else {
@@ -323,9 +334,16 @@ class ViewController: UIViewController {
     }
 
     @IBAction func searchButtonPressed(_ sender: Any) {
-//        let videoURL = URL(string: self.searchTextField.text)
-        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
-        let playerItem = AVPlayerItem(url: videoURL!)
+
+        guard let urlString = self.searchTextField.text else {
+            return
+        }
+
+        guard let videoURL = URL(string: urlString) else {
+            return
+        }
+//        let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
+        let playerItem = AVPlayerItem(url: videoURL)
         player = AVPlayer(playerItem: playerItem)
         playerLayer = AVPlayerLayer(player: player)
 
