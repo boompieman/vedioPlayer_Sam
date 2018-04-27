@@ -18,7 +18,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var playButton: UIButton!
     var isPlaying: Bool = false
+    var isVolumeOn: Bool = true
 
+    @IBOutlet weak var voiceButton: UIButton!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var endTimeLabel: UILabel!
     var player: AVPlayer!
@@ -30,11 +32,6 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.white
         self.title = "Video Player"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-
-
-
-
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -122,10 +119,24 @@ class ViewController: UIViewController {
         })
     }
 
+    @IBAction func voiceButtonPressed(_ sender: Any) {
+
+
+        if self.player != nil {
+
+            if (self.player.isMuted) {
+                self.voiceButton.setImage(UIImage(named: "volume_up"), for: .normal)
+                self.player.isMuted = false
+            }
+
+            else {
+                self.voiceButton.setImage(UIImage(named: "volume_off"), for: .normal)
+                self.player.isMuted = true
+            }
+        }
+    }
 
     @IBAction func searchButtonPressed(_ sender: Any) {
-
-
 //        let videoURL = URL(string: self.searchTextField.text)
         let videoURL = URL(string: "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4")
         let playerItem = AVPlayerItem(url: videoURL!)

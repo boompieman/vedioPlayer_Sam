@@ -96,6 +96,9 @@
                                     <constraint firstAttribute="height" constant="24" id="mv3-V2-wgK"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="volume_up"/>
+                                <connections>
+                                    <action selector="voiceButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TiJ-nB-M2J"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="目前尚無影片可播放" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0T-A3-blt">
                                 <rect key="frame" x="109.5" y="323" width="156" height="21"/>
@@ -146,6 +149,7 @@
                         <outlet property="playButton" destination="qNJ-ze-fau" id="F6h-q3-mR5"/>
                         <outlet property="progressSlider" destination="OoO-xB-3Uf" id="zTT-se-uUb"/>
                         <outlet property="searchTextField" destination="zUj-iI-5OW" id="PZz-9H-S51"/>
+                        <outlet property="voiceButton" destination="4Wg-s9-xoo" id="5ex-7m-b9C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
