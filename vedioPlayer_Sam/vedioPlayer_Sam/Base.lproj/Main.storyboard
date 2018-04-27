@@ -85,6 +85,9 @@
                                     <constraint firstAttribute="height" constant="24" id="u4z-6p-jSC"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="rewind"/>
+                                <connections>
+                                    <action selector="rewindPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TCy-aP-aMh"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Wg-s9-xoo">
                                 <rect key="frame" x="47" y="613" width="24" height="24"/>
@@ -138,6 +141,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="KEV-ib-Ick"/>
                     <connections>
+                        <outlet property="currentTimeLabel" destination="jwY-uh-qZQ" id="Z6f-4f-odV"/>
+                        <outlet property="endTimeLabel" destination="fYp-34-XVA" id="wME-bm-NEL"/>
                         <outlet property="playButton" destination="qNJ-ze-fau" id="F6h-q3-mR5"/>
                         <outlet property="progressSlider" destination="OoO-xB-3Uf" id="zTT-se-uUb"/>
                         <outlet property="searchTextField" destination="zUj-iI-5OW" id="PZz-9H-S51"/>
